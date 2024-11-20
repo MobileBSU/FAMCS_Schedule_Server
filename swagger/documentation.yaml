@@ -1,0 +1,98 @@
+openapi: "3.0.3"
+info:
+  title: "ScheduleApp"
+  description: "API connected to ScheduleApp"
+  version: "1.0.0"
+servers:
+  - url: "http://0.0.0.0:8080"
+paths:
+  /signUp:
+    post:
+      description: "Registers a new user"
+      requestBody:
+        description: "A JSON object that contains user registration details"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpParams"
+      responses:
+        "201":
+          description: "User successfully registered"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                success:
+                  value: "User registered successfully"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                missing:
+                  value: "Invalid or missing parameters"
+
+  /login:
+    post:
+      description: "Logs in a user"
+      requestBody:
+        description: "A JSON object that contains user login credentials"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInParams"
+      responses:
+        "200":
+          description: "User successfully logged in"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                success:
+                  value: "Login successful"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                missing:
+                  value: "Invalid or missing parameters"
+
+components:
+  schemas:
+    SignUpParams:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          description: "The user's name"
+        email:
+          type: string
+          description: "The user's email address"
+        password:
+          type: string
+          description: "The user's password"
+    SignInParams:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          description: "The user's email address"
+        password:
+          type: string
+          description: "The user's password"
