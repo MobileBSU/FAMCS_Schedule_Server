@@ -52,4 +52,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_version")
 
     implementation("de.mkammerer.snowflake-id:snowflake-id:0.0.2")
+
+    implementation("io.ktor:ktor-server-swagger:3.0.1")
+
 }

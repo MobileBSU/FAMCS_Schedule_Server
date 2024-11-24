@@ -66,6 +66,26 @@ paths:
                 missing:
                   value: "Invalid or missing parameters"
 
+  /subjects:
+    get:
+      description: "Fetches a list of all subjects with their schedule"
+      responses:
+        "200":
+          description: "Successfully retrieved the list of subjects"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectResponse"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: "string"
+              examples:
+                error:
+                  value: "An error occurred while fetching subjects"
+
 components:
   schemas:
     SignUpParams:
@@ -96,3 +116,46 @@ components:
         password:
           type: string
           description: "The user's password"
+    Subject:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique ID of the subject"
+        name:
+          type: string
+          description: "The name of the subject"
+        dayOfWeek:
+          type: integer
+          description: "The day of the week (1 for Monday, 7 for Sunday)"
+        startTime:
+          type: string
+          format: time
+          description: "The start time of the subject (HH:mm:ss)"
+        endTime:
+          type: string
+          format: time
+          description: "The end time of the subject (HH:mm:ss)"
+        classRoom:
+          type: integer
+          description: "The classroom number"
+        isLecture:
+          type: boolean
+          description: "Whether the subject is a lecture"
+        teacherId:
+          type: integer
+          description: "The ID of the teacher"
+        groupId:
+          type: integer
+          description: "The ID of the group"
+    SubjectResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subject"
+        errorMessage:
+          type: string
+          nullable: true
+          description: "An error message, if any"
