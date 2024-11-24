@@ -3,7 +3,7 @@ package com.example.route
 import com.example.model.AuthResponse
 import com.example.model.SignInParams
 import com.example.model.SignUpParams
-import com.example.repository.student.StudentRepository
+import com.example.repository.auth.StudentRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond

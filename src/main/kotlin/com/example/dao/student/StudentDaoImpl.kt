@@ -2,21 +2,17 @@ package com.example.dao.student
 
 import com.example.dao.DatabaseFactory.dbQuery
 import com.example.model.SignUpParams
-import com.example.model.Student
-import com.example.model.StudentRow
 import com.example.security.hashPassword
-import org.jetbrains.exposed.sql.Op
+import com.example.util.IdGenerator
 import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.SqlExpressionBuilder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
 class StudentDaoImpl : StudentDao {
-    override suspend fun insert(params: SignUpParams): Student? {
+    override suspend fun insert(params: SignUpParams): StudentRow? {
         return dbQuery {
-            val insertStatement = StudentRow.insert {
+            val insertStatement = StudentTable.insert {
+                it[id] = IdGenerator.generateId()
                 it[name] = params.name
                 it[email] = params.email
                 it[password] = hashPassword(params.password)
@@ -28,21 +24,22 @@ class StudentDaoImpl : StudentDao {
         }
     }
 
-    override suspend fun findByEmail(email: String): Student? {
+    override suspend fun findByEmail(email: String): StudentRow? {
         return dbQuery {
-            StudentRow.selectAll().where { StudentRow.email eq email }
+            StudentTable.selectAll().where { StudentTable.email eq email }
                 .map { rowToStudent(it) }
                 .singleOrNull()
         }
     }
 
-    private fun rowToStudent(row: ResultRow): Student {
-        return Student(
-            id = row[StudentRow.id],
-            name = row[StudentRow.name],
-            email = row[StudentRow.email],
-            avatar = row[StudentRow.avatar],
-            password = row[StudentRow.password]
+    private fun rowToStudent(row: ResultRow): StudentRow {
+        return StudentRow(
+            id = row[StudentTable.id],
+            name = row[StudentTable.name],
+            email = row[StudentTable.email],
+            imageUrl = row[StudentTable.imageUrl],
+            password = row[StudentTable.password],
+            groupId = row[StudentTable.groupId]
         )
     }
 }

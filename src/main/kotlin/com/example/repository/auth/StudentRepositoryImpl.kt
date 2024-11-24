@@ -1,4 +1,4 @@
-package com.example.repository.student
+package com.example.repository.auth
 
 import com.example.dao.student.StudentDao
 import com.example.model.AuthResponse
@@ -37,7 +37,7 @@ class StudentRepositoryImpl(
                         data = AuthResponseData(
                             id = insertedStudent.id,
                             name = insertedStudent.name,
-                            avatar = insertedStudent.avatar,
+                            imageUrl = insertedStudent.imageUrl,
                             token = generateToke(params.email)
                         )
                     )

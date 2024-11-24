@@ -50,4 +50,6 @@ dependencies {
 
     implementation("com.zaxxer:HikariCP:$hikaricp_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
+
+    implementation("de.mkammerer.snowflake-id:snowflake-id:0.0.2")
 }
