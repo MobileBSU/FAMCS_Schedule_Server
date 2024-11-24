@@ -1,6 +1,9 @@
 package com.example.dao
 
-import com.example.model.StudentRow
+import com.example.dao.group.GroupTable
+import com.example.dao.student.StudentTable
+import com.example.dao.subject.SubjectTable
+import com.example.dao.teacher.TeacherTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +16,7 @@ object DatabaseFactory {
     fun init() {
         Database.connect(createHikariDataSource())
         transaction {
-            SchemaUtils.create(StudentRow)
+            SchemaUtils.create(StudentTable, SubjectTable, GroupTable, TeacherTable)
         }
     }
 
