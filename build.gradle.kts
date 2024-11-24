@@ -3,7 +3,7 @@ val h2_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
-
+val ktor_version: String by project
 val koin_version: String by project
 val hikaricp_version: String by project
 
@@ -42,6 +42,11 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.mockito:mockito-core:4.5.0")
+
+
+    implementation("io.ktor:ktor-server-config-yaml-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-swagger-jvm:$ktor_version")
 
     implementation("com.zaxxer:HikariCP:$hikaricp_version")
     implementation("io.insert-koin:koin-ktor:$koin_version")
