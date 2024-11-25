@@ -10,7 +10,7 @@ object StudentTable: Table(name = "students") {
     val password = varchar(name = "student_password", length = 100)
     val imageUrl = text(name = "student_image_url").nullable()
 
-    val groupId = reference("group_id", GroupTable.id)
+    val groupId = reference("group_id", GroupTable.id).nullable()
 
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(id)
@@ -23,5 +23,5 @@ data class StudentRow(
     val email: String,
     val imageUrl: String?,
     val password: String,
-    val groupId: Long
+    val groupId: Long? = null
 )
