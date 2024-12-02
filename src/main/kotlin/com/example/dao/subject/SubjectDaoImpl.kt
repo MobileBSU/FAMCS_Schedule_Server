@@ -5,9 +5,21 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 
 class SubjectDaoImpl : SubjectDao {
-    override suspend fun getSubjects(): List<SubjectRow> {
+    override suspend fun getSubjectsByGroup(id: Long): List<SubjectRow> {
         return dbQuery {
-            SubjectTable.selectAll().map { rowToSubject(it) }
+            SubjectTable
+                .selectAll()
+                .where{ SubjectTable.groupId eq id }
+                .map { rowToSubject(it) }
+        }
+    }
+
+    override suspend fun getSubjectsByTeacher(id: Long): List<SubjectRow> {
+        return dbQuery {
+            SubjectTable
+                .selectAll()
+                .where {SubjectTable.teacherId eq id}
+                .map { rowToSubject(it) }
         }
     }
 

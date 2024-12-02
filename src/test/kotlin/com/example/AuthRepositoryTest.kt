@@ -14,7 +14,7 @@ import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
-class StudentRepositoryTest {
+class AuthRepositoryTest {
 
     private val studentDao: StudentDao = mock(StudentDao::class.java)
     private val studentRepository = StudentRepositoryImpl(studentDao)
