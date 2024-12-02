@@ -5,6 +5,14 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 
 class TeacherDaoImpl: TeacherDao {
+    override suspend fun getAllTeachers(): List<TeacherRow> {
+        return dbQuery {
+            TeacherTable
+                .selectAll()
+                .map { rowToTeacher(it) }
+        }
+    }
+
     override suspend fun getTeacherByName(input: String): List<TeacherRow> {
         return dbQuery{
             TeacherTable
