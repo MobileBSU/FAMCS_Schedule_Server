@@ -10,9 +10,9 @@ import com.example.security.hashPassword
 import com.example.util.Response
 import io.ktor.http.HttpStatusCode
 
-class StudentRepositoryImpl(
+class AuthRepositoryImpl(
     private val studentDao: StudentDao
-) : StudentRepository {
+) : AuthRepository {
     override suspend fun signUp(params: SignUpParams): Response<AuthResponse> {
         return if(studentAlreadyExist(params.email)) {
             Response.Error(

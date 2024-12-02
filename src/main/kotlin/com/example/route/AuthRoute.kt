@@ -3,7 +3,7 @@ package com.example.route
 import com.example.model.AuthResponse
 import com.example.model.SignInParams
 import com.example.model.SignUpParams
-import com.example.repository.auth.StudentRepository
+import com.example.repository.auth.AuthRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
@@ -11,7 +11,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 
-fun Routing.authRouting(repository: StudentRepository) {
+fun Routing.authRouting(repository: AuthRepository) {
 
     route(path = "/signup") {
         post {

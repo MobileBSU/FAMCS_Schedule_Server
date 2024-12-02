@@ -20,3 +20,8 @@ data class SubjectResponseData (
     val teacherId: Long,
     val groupId: Long
 )
+
+@Serializable
+data class SubjectParam(
+    val id: Long
+)
