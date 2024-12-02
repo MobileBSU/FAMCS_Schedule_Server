@@ -65,26 +65,199 @@ paths:
               examples:
                 missing:
                   value: "Invalid or missing parameters"
-
-  /subjects:
+  /subject/group:
     get:
-      description: "Fetches a list of all subjects with their schedule"
+      description: "Fetches subjects by group ID"
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "The ID of the group"
       responses:
         "200":
-          description: "Successfully retrieved the list of subjects"
+          description: "Successfully retrieved subjects for the group"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubjectResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                missing:
+                  value: "Invalid or missing group ID"
         "500":
           description: "Internal Server Error"
           content:
             application/json:
               schema:
-                type: "string"
+                type: string
               examples:
                 error:
-                  value: "An error occurred while fetching subjects"
+                  value: "An error occurred while fetching subjects for the group"
+
+  /subject/teacher:
+    get:
+      description: "Fetches subjects by teacher ID"
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "The ID of the teacher"
+      responses:
+        "200":
+          description: "Successfully retrieved subjects for the teacher"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubjectResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                missing:
+                  value: "Invalid or missing teacher ID"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "An error occurred while fetching subjects for the teacher"
+
+  /students/{id}:
+    patch:
+      description: "Updates a student's information by their ID"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "The ID of the student to update"
+      requestBody:
+        description: "A JSON object with the student's updated information"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStudentParams"
+      responses:
+        "200":
+          description: "Student information successfully updated"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "400":
+          description: "Invalid student ID or bad request"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                missing:
+                  value: "Invalid student ID"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "An error occurred while updating the student"
+
+    get:
+      description: "Fetches details of a student by their ID"
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: "The ID of the student to fetch"
+      responses:
+        "200":
+          description: "Successfully retrieved the student's details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "400":
+          description: "Invalid student ID"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                missing:
+                  value: "Invalid student ID"
+        "404":
+          description: "Student not found"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                not_found:
+                  value: "Student not found"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "An error occurred while fetching the student's details"
+  /teachers:
+    get:
+      description: "Fetches a list of teachers based on a search input"
+      parameters:
+        - in: query
+          name: input
+          required: true
+          schema:
+            type: string
+          description: "Search input to filter teachers by their name"
+      responses:
+        "200":
+          description: "Successfully retrieved the list of teachers"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherResponse"
+        "400":
+          description: "Bad Request"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                missing:
+                  value: "Invalid or missing input parameter"
+        "500":
+          description: "Internal Server Error"
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                error:
+                  value: "An error occurred while fetching teachers"
 
 components:
   schemas:
@@ -159,3 +332,89 @@ components:
           type: string
           nullable: true
           description: "An error message, if any"
+    UpdateStudentParams:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: "The new name of the student"
+        email:
+          type: string
+          nullable: true
+          description: "The new email address of the student"
+        password:
+          type: string
+          nullable: true
+          description: "The new password of the student"
+        imageUrl:
+          type: string
+          nullable: true
+          description: "The new image URL of the student"
+        groupId:
+          type: integer
+          nullable: true
+          description: "The new group ID of the student"
+    StudentResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: "The unique ID of the student"
+            name:
+              type: string
+              nullable: true
+              description: "The name of the student"
+            email:
+              type: string
+              nullable: true
+              description: "The email of the student"
+            imageUrl:
+              type: string
+              nullable: true
+              description: "The image URL of the student"
+            groupId:
+              type: integer
+              nullable: true
+              description: "The group ID of the student"
+        errorMessage:
+          type: string
+          nullable: true
+          description: "An error message, if any"
+
+    TeacherSearchParam:
+      type: object
+      properties:
+        input:
+          type: string
+          description: "The search input for filtering teachers by name"
+      TeacherResponse:
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: "#/components/schemas/TeacherResponseData"
+          errorMessage:
+            type: string
+            nullable: true
+            description: "An error message, if any"
+      TeacherResponseData:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: "The unique ID of the teacher"
+          name:
+            type: string
+            description: "The name of the teacher"
+          bio:
+            type: string
+            description: "A brief bio of the teacher"
+          imageUrl:
+            type: string
+            nullable: true
+            description: "The URL of the teacher's image"
