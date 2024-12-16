@@ -60,4 +60,28 @@ class TeacherRepositoryImpl(
             )
         }
     }
+
+    override suspend fun getTeacherById(id: Long): Response<TeacherResponse> {
+        return try {
+            val teacher = teacherDao.getTeacherById(id)
+
+            val teacherResponseData = teacher.let {
+                    TeacherResponseData(
+                        id = it.id,
+                        name = it.name,
+                        bio = it.bio,
+                        imageUrl = it.imageUrl
+                    )
+                }
+
+            Response.Success(data = TeacherResponse(data = listOf(teacherResponseData)))
+        } catch (e: Exception) {
+            Response.Error(
+                code = HttpStatusCode.NotFound,
+                data = TeacherResponse(
+                    errorMessage = "Ooooops, something gone wrong"
+                )
+            )
+        }
+    }
 }

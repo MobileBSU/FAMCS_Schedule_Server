@@ -80,4 +80,29 @@ class GroupRepositoryImpl(
             )
         }
     }
+
+    override suspend fun getGroupById(id: Long): Response<GroupResponse> {
+        return try {
+            val group = groupDao.getGroupById(id)
+
+            val groupResponseData = group.let {groupRow ->
+                GroupResponseData(
+                    id = groupRow.id,
+                    course = groupRow.course,
+                    groupNumber = groupRow.groupNumber,
+                    name = groupRow.name,
+                    subGroupNumber = groupRow.subGroupNumber
+                )
+            }
+            Response.Success(data = GroupResponse(data = listOf(groupResponseData)))
+
+        } catch (e: Exception) {
+            Response.Error(
+                code = HttpStatusCode.Forbidden,
+                data = GroupResponse(
+                    errorMessage = e.toString()
+            )
+        )
+        }
+    }
 }

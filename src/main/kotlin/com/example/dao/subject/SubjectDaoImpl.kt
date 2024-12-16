@@ -23,6 +23,16 @@ class SubjectDaoImpl : SubjectDao {
         }
     }
 
+    override suspend fun getSubjectById(id: Long): SubjectRow {
+        return dbQuery {
+            SubjectTable
+                .selectAll()
+                .where{SubjectTable.id eq id}
+                .map { rowToSubject(it) }
+                .single()
+        }
+    }
+
     private fun rowToSubject(row: ResultRow): SubjectRow {
         return SubjectRow(
             id = row[SubjectTable.id],

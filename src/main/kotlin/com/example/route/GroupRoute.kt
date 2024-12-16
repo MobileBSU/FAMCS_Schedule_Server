@@ -69,4 +69,40 @@ fun Routing.groupRouting(
             }
         }
     }
+
+    route(path = "/group/{id}") {
+        get {
+            try {
+                val id = call.parameters["id"]?.toLongOrNull()
+
+                if (id == null) {
+                    call.respond(
+                        status = HttpStatusCode.BadRequest,
+                        message = "Invalid group ID"
+                    )
+
+                    return@get
+                }
+
+                val result = repository.getGroupById(id)
+
+                if (result.data.errorMessage != null) {
+                    call.respond(
+                        status = HttpStatusCode.InternalServerError,
+                        message = result.data.errorMessage
+                    )
+                } else {
+                    call.respond(
+                        status = HttpStatusCode.OK,
+                        message = result.data
+                    )
+                }
+            } catch (e: Exception) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = e.localizedMessage ?: "An unknown error occurred"
+                )
+            }
+        }
+    }
 }

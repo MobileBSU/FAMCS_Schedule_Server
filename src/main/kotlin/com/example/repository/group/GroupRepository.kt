@@ -8,4 +8,5 @@ import com.example.util.Response
 interface GroupRepository {
     suspend fun getAllGroups(): Response<GroupResponse>
     suspend fun getGroupsByName(param: GroupSearchParam): Response<GroupResponse>
+    suspend fun getGroupById(id: Long): Response<GroupResponse>
 }

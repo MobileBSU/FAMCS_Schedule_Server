@@ -60,4 +60,45 @@ fun Routing.teacherRouting(repository: TeacherRepository) {
                 }
             }
         }
+
+    route(path = "/teacher/{id}") {
+        get {
+            try {
+                val id = call.parameters["id"]?.toLongOrNull()
+
+                if (id == null) {
+                    call.respond(
+                        status = HttpStatusCode.BadRequest,
+                        message = "Invalid teacher ID"
+                    )
+
+                    return@get
+                }
+
+                val result = repository.getTeacherById(id)
+
+                if (result.data.errorMessage != null) {
+                    call.respond(
+                        status = HttpStatusCode.InternalServerError,
+                        message = result.data.errorMessage
+                    )
+                } else {
+                    call.respond(
+                        status = HttpStatusCode.OK,
+                        message = result.data
+                    )
+                }
+            } catch (e: Exception) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = e.localizedMessage ?: "An unknown error occurred"
+                )
+            }
+        }
+    }
+
+
+
+
+
     }

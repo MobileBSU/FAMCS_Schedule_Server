@@ -23,6 +23,16 @@ class GroupDaoImpl : GroupDao {
         }
     }
 
+    override suspend fun getGroupById(id: Long): GroupRow {
+        return dbQuery {
+            GroupTable
+                .selectAll()
+                .where{GroupTable.id eq id}
+                .map { rowToGroup(it) }
+                .single()
+        }
+    }
+
     private fun rowToGroup(row: ResultRow): GroupRow {
         return GroupRow(
             id = row[GroupTable.id],

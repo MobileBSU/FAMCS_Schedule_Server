@@ -2,6 +2,7 @@ package com.example.dao.teacher
 
 import com.example.dao.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.selectAll
 
 class TeacherDaoImpl: TeacherDao {
@@ -19,6 +20,16 @@ class TeacherDaoImpl: TeacherDao {
                 .selectAll()
                 .where {TeacherTable.name like "%$input%"}
                 .map { rowToTeacher(it) }
+        }
+    }
+
+    override suspend fun getTeacherById(id: Long): TeacherRow {
+        return dbQuery {
+            TeacherTable
+                .selectAll()
+                .where(TeacherTable.id eq id)
+                .map { rowToTeacher(it) }
+                .single()
         }
     }
 

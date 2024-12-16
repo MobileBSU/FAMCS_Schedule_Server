@@ -7,4 +7,5 @@ import com.example.util.Response
 interface TeacherRepository {
     suspend fun getAllTeachers(): Response<TeacherResponse>
     suspend fun getTeachersByName(input: String): Response<TeacherResponse>
+    suspend fun getTeacherById(id: Long): Response<TeacherResponse>
 }
