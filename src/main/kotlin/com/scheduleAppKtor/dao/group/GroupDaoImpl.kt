@@ -4,6 +4,7 @@ import com.scheduleAppKtor.dao.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.CharColumnType
 import org.jetbrains.exposed.sql.Expression
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.castTo
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
@@ -31,6 +32,17 @@ class GroupDaoImpl : GroupDao {
             GroupTable
                 .selectAll()
                 .where{GroupTable.id eq id}
+                .map { rowToGroup(it) }
+                .single()
+        }
+    }
+
+    override suspend fun getGroupByCourse(course: Int, group: Int): GroupRow {
+        return dbQuery {
+            GroupTable
+                .selectAll()
+                .where{(GroupTable.course eq course) and
+                        (GroupTable.groupNumber eq group)}
                 .map { rowToGroup(it) }
                 .single()
         }

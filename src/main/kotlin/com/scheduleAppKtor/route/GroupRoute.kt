@@ -102,4 +102,42 @@ fun Routing.groupRouting(
             }
         }
     }
-}
+
+    route(path = "/group/{course}/{group}") {
+        get {
+            try {
+
+
+                val course = call.parameters["course"]?.toIntOrNull()
+                val group = call.parameters["group"]?.toIntOrNull()
+
+                if (course == null || group == null) {
+                    call.respond(
+                        status = HttpStatusCode.NotFound,
+                        message = "Invalid group ID"
+                    )
+
+                    return@get
+                }
+
+                val result = repository.getGroupByCourse(course, group)
+                if (result.data.errorMessage != null) {
+                    call.respond(
+                        status = HttpStatusCode.InternalServerError,
+                        message = result.data.errorMessage
+                    )
+                } else {
+                    call.respond(
+                        status = HttpStatusCode.OK,
+                        message = result.data
+                    )
+                }
+            } catch (e: Exception) {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = e.localizedMessage ?: "An unknown error occurred"
+                )
+            }
+        }
+    }
+    }
