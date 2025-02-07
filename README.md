@@ -1,50 +1,54 @@
 # ScheduleApp Server
 
-### Описание
+## Languages
+- [English](README.md)
+- [Русский](README_ru.md)
 
-Этот сервер поддерживает мобильное приложение ScheduleApp, предоставляющее расписание для студентов и преподавателей университета. Сервер разработан на базе Ktor с использованием различных современных библиотек и технологий.
+### Description
 
-## Технологический стек
+This server supports the ScheduleApp mobile application, providing schedules for university students and teachers. The server is built with Ktor, using various modern libraries and technologies.
 
-- **Языки программирования:** Kotlin, Java
-- **Фреймворки и библиотеки:**
+## Tech Stack
+
+- **Programming Languages:** Kotlin, Java
+- **Frameworks and Libraries:**
   - Ktor (Jwt, Exposed, HikariCP, Serialization, Swagger, Web Sockets)
-  - Coroutines + Flow (для работы с асинхронными потоками данных)
-  - Koin (для внедрения зависимостей)
+  - Coroutines + Flow (for handling asynchronous data streams)
+  - Koin (for dependency injection)
   - PostgreSQL
-  - JUnit + Mockito (тестирование)
-- **Инструменты планирования:**
-  - GitHub для управления проектом и версионирования
+  - JUnit + Mockito (testing)
+- **Planning Tools:**
+  - GitHub for project management and version control
 
-## Установка и запуск
+## Installation and Running
 
-1. Склонируйте репозиторий:
+1. Clone the repository:
     ```bash
     git clone https://github.com/MobileBSU/FAMCS_Schedule_Server.git
     ```
-2. Настройте конфигурационные файлы (например, `application.conf`) с данными о подключении к базе данных.
-3. Соберите и запустите сервер:
+2. Configure the necessary files (e.g., `application.conf`) with database connection details.
+3. Build and run the server:
     ```bash
     ./gradlew run
     ```
 
-## API: Описание эндпоинтов
+## API: Endpoint Overview
 
-API сервера сгруппирован по ролям пользователей: **Студенты**, **Преподаватели**, **Администраторы**.
+The server's API is grouped by user roles: **Students**, **Teachers**, **Administrators**.
 
-### Общие эндпоинты (для всех пользователей)
+### General Endpoints (for all users)
 
-#### Авторизация и регистрация
+#### Authentication and Registration
 - **POST** `/api/auth/login`
-  - Описание: Вход в систему.
-  - Тело запроса:
+  - Description: Logs in a user.
+  - Request Body:
     ```json
     {
       "email": "user@example.com",
       "password": "password123"
     }
     ```
-  - Ответ:
+  - Response:
     ```json
     {
       "token": "jwt-token"
@@ -52,8 +56,8 @@ API сервера сгруппирован по ролям пользовате
     ```
 
 - **POST** `/api/auth/register`
-  - Описание: Регистрация нового пользователя.
-  - Тело запроса:
+  - Description: Registers a new user.
+  - Request Body:
     ```json
     {
       "email": "user@example.com",
@@ -61,16 +65,16 @@ API сервера сгруппирован по ролям пользовате
       "role": "student"
     }
     ```
-  - Ответ: Статус 201 при успешной регистрации.
+  - Response: Status 201 on successful registration.
 
-### Студенты
+### Students
 
-#### Получение расписания
+#### Retrieve Schedule
 - **GET** `/api/schedule/student`
-  - Описание: Получение расписания для текущего пользователя.
-  - Заголовки:
+  - Description: Retrieves the schedule for the current user.
+  - Headers:
     - Authorization: `Bearer jwt-token`
-  - Ответ:
+  - Response:
     ```json
     [
       {
@@ -88,10 +92,10 @@ API сервера сгруппирован по ролям пользовате
     ]
     ```
 
-#### Запросы на изменения расписания
+#### Request Schedule Changes
 - **POST** `/api/schedule/request`
-  - Описание: Отправить запрос на изменение расписания.
-  - Тело запроса:
+  - Description: Submits a request to modify the schedule.
+  - Request Body:
     ```json
     {
       "day": "Monday",
@@ -99,16 +103,16 @@ API сервера сгруппирован по ролям пользовате
       "reason": "Conflict with another subject"
     }
     ```
-  - Ответ: Статус 200 при успешной отправке.
+  - Response: Status 200 on successful submission.
 
-### Преподаватели
+### Teachers
 
-#### Управление расписанием
+#### Manage Schedule
 - **POST** `/api/schedule/teacher`
-  - Описание: Добавление или изменение расписания для преподавателя.
-  - Заголовки:
+  - Description: Adds or updates a schedule entry for a teacher.
+  - Headers:
     - Authorization: `Bearer jwt-token`
-  - Тело запроса:
+  - Request Body:
     ```json
     {
       "day": "Monday",
@@ -117,12 +121,12 @@ API сервера сгруппирован по ролям пользовате
       "room": "201"
     }
     ```
-  - Ответ: Статус 200 при успешном обновлении.
+  - Response: Status 200 on successful update.
 
-#### Просмотр запросов на изменения
+#### View Change Requests
 - **GET** `/api/schedule/requests`
-  - Описание: Получение списка запросов на изменение расписания от студентов.
-  - Ответ:
+  - Description: Retrieves a list of schedule change requests from students.
+  - Response:
     ```json
     [
       {
@@ -134,14 +138,14 @@ API сервера сгруппирован по ролям пользовате
     ]
     ```
 
-### Администраторы
+### Administrators
 
-#### Управление пользователями
+#### User Management
 - **GET** `/api/admin/users`
-  - Описание: Получение списка пользователей.
-  - Заголовки:
+  - Description: Retrieves a list of users.
+  - Headers:
     - Authorization: `Bearer jwt-token`
-  - Ответ:
+  - Response:
     ```json
     [
       {
@@ -158,15 +162,15 @@ API сервера сгруппирован по ролям пользовате
     ```
 
 - **DELETE** `/api/admin/users/{id}`
-  - Описание: Удаление пользователя по ID.
-  - Заголовки:
+  - Description: Deletes a user by ID.
+  - Headers:
     - Authorization: `Bearer jwt-token`
-  - Ответ: Статус 200 при успешном удалении.
+  - Response: Status 200 on successful deletion.
 
-#### Управление расписанием
+#### Schedule Management
 - **POST** `/api/admin/schedule`
-  - Описание: Добавление глобальных изменений расписания.
-  - Тело запроса:
+  - Description: Adds global schedule changes.
+  - Request Body:
     ```json
     {
       "day": "Tuesday",
@@ -175,12 +179,12 @@ API сервера сгруппирован по ролям пользовате
       "room": "301"
     }
     ```
-  - Ответ: Статус 200 при успешном добавлении.
+  - Response: Status 200 on successful addition.
 
-## Документация API
+## API Documentation
 
-Полная документация доступна через Swagger по адресу: `/swagger`
+Full documentation is available via Swagger at: `/swagger`
 
 ---
 
-Для любых вопросов или предложений создавайте тикеты в репозитории [GitHub](https://github.com/MobileBSU/FAMCS_Schedule_Server.git).
+For any questions or suggestions, feel free to create issues in the [GitHub repository](https://github.com/MobileBSU/FAMCS_Schedule_Server.git).
